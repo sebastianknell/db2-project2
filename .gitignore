@@ -1,3 +1,4 @@
 .DS_Store
 src/__pycache__
 src/data/articles1.csv
+src/data/temp.txt
