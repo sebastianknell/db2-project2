@@ -5,13 +5,13 @@ from nltk import SnowballStemmer, word_tokenize
 from nltk.corpus import stopwords
 from ast import literal_eval
 
-CHUNK_SIZE = 1000
+CHUNK_SIZE = 2500
 DATA_FILE = "src/data/articles1.csv"
-TEMP_FILE = "src/data/temp{}.txt"
+TEMP_FILE = "src/data/temp/chunk{}.txt"
 INDEX_FILE = "src/data/index.txt"
 
 # Index structure
-# term:[(docID,tf)] -> df = length of list
+# term:[(rowID,tf),...] -> df = length of list
 def writeIndex(index, filename):
     with open(filename, 'a+') as file:
         for term, docDict in index.items():
@@ -42,7 +42,7 @@ def readIndex(filename):
             index[term] = dict(tuples)
 
 
-def mergeByBlocks(chunkCount):
+def mergeByChunks(chunkCount):
     for i in range(0, chunkCount-1, 2):
         index1 = readIndex(TEMP_FILE.format(i))
         index2 = readIndex(TEMP_FILE.format(i+1))
@@ -53,7 +53,7 @@ def buildIndex():
     with pd.read_csv(DATA_FILE, chunksize=CHUNK_SIZE) as reader:
         stemmer = SnowballStemmer('english')
         stoplist = stopwords.words('english')
-        stoplist += ['.', '?', '-', '«', '»', ',', '(', ')', ':', ';']
+        stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*']
         chunkCount = 0
         for chunk in reader:
             chunkCount += 1
@@ -82,8 +82,8 @@ def buildIndex():
                         localIndex[token] = {id: 1}
 
             # Write chunck
+            localIndex = dict(sorted(localIndex.items(), key = lambda elem : elem[0]))
             writeIndex(localIndex, TEMP_FILE.format(chunkCount))
-            break
-
+        # mergeByChunks(chunkCount)
 
 buildIndex()
