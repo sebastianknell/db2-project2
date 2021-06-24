@@ -1,4 +1,3 @@
-from nltk.compat import DATA_UPDATES
 import pandas as pd
 import numpy as np
 from nltk import SnowballStemmer, word_tokenize
@@ -50,10 +49,10 @@ def mergeByChunks(chunkCount):
 
 
 def buildIndex():
-    with pd.read_csv(DATA_FILE, chunksize=CHUNK_SIZE) as reader:
+    with pd.read_csv(DATA_FILE, chunksize=CHUNK_SIZE, encoding='UTF-8') as reader:
         stemmer = SnowballStemmer('english')
         stoplist = stopwords.words('english')
-        stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*']
+        stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+']
         chunkCount = 0
         for chunk in reader:
             chunkCount += 1
@@ -64,9 +63,12 @@ def buildIndex():
                 # 1. Tokenize
                 words = word_tokenize(text.lower().strip())
                 # 2. Filter stopswords
-                for w in words:
-                    if w in stoplist:
-                        words.remove(w)
+                i = 0
+                while i < len(words):
+                    if words[i] in stoplist:
+                        words.pop(i)
+                    else:
+                        i += 1
                 # 3. Stemming
                 for i in range(len(words)):
                     words[i] = stemmer.stem(words[i])
