@@ -15,10 +15,13 @@ def writeIndex(index, filename):
     with open(filename, 'a+') as file:
         for term, docDict in index.items():
             line = str(term)
-            line += ':['
+            line += ' ['
             for tup in docDict.items():
-                line += str(tup)
+                line += '('
+                line += str(tup[0])
                 line += ','
+                line += str(tup[1])
+                line += '),'
             line += ']'
             line += '\n'
             file.writelines(line)
@@ -28,18 +31,13 @@ def readIndex(filename):
     index = {}
     with open(filename, 'r') as file:
         for line in file:
-            # Read term
-            line = line.strip()
-            term = ""
-            i = 0
-            while(i < len(line) and line[i] != ':'):
-                term += line[i]
-                i += 1
-            i += 1
-            # Read list of tuples and add to index
-            tuples = literal_eval(line[i:])
-            index[term] = dict(tuples)
-
+            l = line.split()
+            if len(l) != 2:
+                print("Couldn't read index")
+                exit()
+            tuples = literal_eval(l[1])
+            index[l[0]] = dict(tuples)
+    return index
 
 def mergeByChunks(chunkCount):
     for i in range(0, chunkCount-1, 2):
@@ -52,7 +50,7 @@ def buildIndex():
     with pd.read_csv(DATA_FILE, chunksize=CHUNK_SIZE, encoding='UTF-8') as reader:
         stemmer = SnowballStemmer('english')
         stoplist = stopwords.words('english')
-        stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+']
+        stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+', '']
         chunkCount = 0
         for chunk in reader:
             chunkCount += 1
@@ -86,6 +84,9 @@ def buildIndex():
             # Write chunck
             localIndex = dict(sorted(localIndex.items(), key = lambda elem : elem[0]))
             writeIndex(localIndex, TEMP_FILE.format(chunkCount))
+            break
         # mergeByChunks(chunkCount)
 
-buildIndex()
+# buildIndex()
+index = readIndex(TEMP_FILE.format(1))
+print(index['tweet'])
