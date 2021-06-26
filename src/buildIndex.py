@@ -3,8 +3,10 @@ import numpy as np
 from nltk import SnowballStemmer, word_tokenize
 from nltk.corpus import stopwords
 from ast import literal_eval
+from collections import OrderedDict
 
-CHUNK_SIZE = 2500
+CHUNK_SIZE = 5000
+BLOCK_SIZE = 10000
 DATA_FILE = "src/data/articles1.csv"
 TEMP_FILE = "src/data/temp/chunk{}.txt"
 INDEX_FILE = "src/data/index.txt"
@@ -39,7 +41,7 @@ def readIndex(filename):
             index[l[0]] = dict(tuples)
     return index
 
-def mergeByChunks(chunkCount):
+def mergeByBlocks(chunkCount):
     for i in range(0, chunkCount-1, 2):
         index1 = readIndex(TEMP_FILE.format(i))
         index2 = readIndex(TEMP_FILE.format(i+1))
@@ -73,7 +75,7 @@ def buildIndex():
 
                 # 4. Build index
                 for token in words:
-                    if token in localIndex.keys():
+                    if len(token) > 0 and token in localIndex.keys():
                         if id in localIndex[token].keys():
                             localIndex[token][id] += 1
                         else:
@@ -84,9 +86,8 @@ def buildIndex():
             # Write chunck
             localIndex = dict(sorted(localIndex.items(), key = lambda elem : elem[0]))
             writeIndex(localIndex, TEMP_FILE.format(chunkCount))
-            break
-        # mergeByChunks(chunkCount)
+        # mergeByBlocks(chunkCount)
 
-# buildIndex()
-index = readIndex(TEMP_FILE.format(1))
-print(index['tweet'])
+buildIndex()
+# index = readIndex(TEMP_FILE.format(1))
+# print(index['tweet'])
