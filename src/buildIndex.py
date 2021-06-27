@@ -9,7 +9,7 @@ INDEX_FILE = "src/data/index.txt"
 # Index structure
 # term:[(rowID,tf),...] -> df = length of list
 def writeIndex(index, filename):
-    with open(filename, 'a+') as file:
+    with open(filename, 'a+', encoding='utf-8') as file:
         for term, docDict in index.items():
             line = str(term)
             line += ' ['
@@ -26,7 +26,7 @@ def writeIndex(index, filename):
 
 def readIndex(filename):
     index = {}
-    with open(filename, 'r') as file:
+    with open(filename, 'r', encoding='utf-8') as file:
         for line in file:
             l = line.split()
             if len(l) != 2:
@@ -73,5 +73,5 @@ def buildIndex():
     writeIndex(index, INDEX_FILE)
 
 
-# buildIndex()
+#buildIndex()
 readIndex(INDEX_FILE)
