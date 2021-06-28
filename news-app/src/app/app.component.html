@@ -1,0 +1,11 @@
+<div>
+  <div class="center">
+    <h1>All The News</h1>
+    <input autofocus [(ngModel)]="query">
+    <button (click)="sendQuery()" type="button" class="btn btn-primary">Buscar</button>
+    <br>
+    <div *ngFor="let n of news">
+      <app-news-preview [data]="news[0]"></app-news-preview>
+    </div>
+  </div>
+</div>
