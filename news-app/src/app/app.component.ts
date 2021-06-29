@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { New } from './new';
 import { NewsService } from './news.service';
-import { NewsPreviewComponent } from "./news-preview/news-preview.component";
 
 @Component({
   selector: 'app-root',
