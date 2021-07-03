@@ -11,7 +11,7 @@ export class NewsService {
 
   constructor(private http: HttpClient) { }
 
-  postQuery(query: string): Observable<New> {
-    return this.http.post<New>(this.newsApi, {query: query})
+  postQuery(query: string): Observable<New[]> {
+    return this.http.post<New[]>(this.newsApi, {query: query})
   }
 }
