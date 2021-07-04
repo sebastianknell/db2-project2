@@ -1,0 +1,28 @@
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: whitesmoke;
+  overflow: auto;
+}
+
+input {
+    font-size: 18px;
+    width: 100ch;
+    border: 1.5px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: 'f7f7f7';
+}
+
+input:focus {
+    outline: none !important;
+}
+
+h1 {
+    font-size: 64px;
+}

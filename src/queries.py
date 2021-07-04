@@ -15,6 +15,9 @@ def getFrequencies(dict):
         queryTfs[term] = getFrequency(result[term])
     return queryTfs
 
+def getDocIDS(dict):
+    return dict.keys()
+
 def getDocFrequency(frequencies):
     return len(frequencies)
 
@@ -114,3 +117,4 @@ for term in query:
 
 queryTfs = getFrequencies(result)
 print(queryTfs)
+print(getDocIDS(result))

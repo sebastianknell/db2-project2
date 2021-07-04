@@ -3,4 +3,9 @@ src/__pycache__
 src/data/articles1.csv
 src/data/index.txt
 src/data/temp
+<<<<<<< HEAD
 .vscode/*
+=======
+src/data/doclen.txt
+.vscode/*
+>>>>>>> 1d307a71e474865f94c11be852f0ff138fa1ce58
