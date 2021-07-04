@@ -91,5 +91,5 @@ def readDocNorms():
 
 # buildIndex()
 # readIndex(INDEX_FILE)
-getDocNorms()
+#getDocNorms()
 # docLen = readDocNorms()
