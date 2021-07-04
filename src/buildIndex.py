@@ -5,6 +5,7 @@ from ast import literal_eval
 
 DATA_FILE = "src/data/articles1.csv"
 INDEX_FILE = "src/data/index.txt"
+DOC_LEN_FILE = "src/data/doclen.txt"
 
 # Index structure
 # term:[(rowID,tf),...] -> df = length of list
@@ -73,5 +74,22 @@ def buildIndex():
     writeIndex(index, INDEX_FILE)
 
 
+def getDocNorms():
+    file = pd.read_csv(DATA_FILE, encoding='UTF-8')
+    docLen = {}
+    for id, row in file.iterrows():
+        docLen[id] = len(row['title']) + len(row['content'])
+    with open(DOC_LEN_FILE, 'w+') as outFile:
+        outFile.writelines(str(docLen))
+
+
+def readDocNorms():
+    with open(DOC_LEN_FILE, 'r') as outFile:
+        text = outFile.readline()
+    docLen = literal_eval(text)
+    return docLen
+
 # buildIndex()
-readIndex(INDEX_FILE)
+# readIndex(INDEX_FILE)
+# getDocNorms()
+# docLen = readDocNorms()
