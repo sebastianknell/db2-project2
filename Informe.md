@@ -15,7 +15,7 @@
   - [Anexos](#anexos)
 
 ## Introducción
-El objetivo de este proyecto fue implementar un índice invertido para tareas de búsqueda y recuperación en documentos de texto en base al modelo de recuperación por ranking y probar su desempeño mediante consultas en lenguaje natural. Para ello se construyo una aplicación frontend que interactua con las principales operaciones del índice invertido: carga e indexación de documentos en tiempo real y búsqueda textual relacionado a ciertos temas de interés. Los resultados de búsqueda se obtienen aplicando la similitud de coseno sobre el índice invertido. Se uso un conjunto de datos de prueba obtenido de [Kaggle](https://www.kaggle.com/datasets). Este conjunto de datos esta conformado por artículos de diferentes periodicos, que incluyen New York Times, CNN, Fox News, entre otros. Las publicaciones se encuentran principalmente entre los años 2016 y 2017. De acuerdo a lo aprendido, se espera obtener un alto grado de precisión a la consulta ingresada por el usuario, es decir, del conjunto de elementos recuperados, la mayoría son documentos relevantes para el usuario.
+El objetivo de este proyecto fue implementar un índice invertido para tareas de búsqueda y recuperación en documentos de texto en base al modelo de recuperación por ranking y probar su desempeño mediante consultas en lenguaje natural. Para ello se construyó una aplicación frontend que interactúa con las principales operaciones del índice invertido: carga e indexación de documentos en tiempo real y búsqueda textual relacionado a ciertos temas de interés. Los resultados de búsqueda se obtienen aplicando la similitud de coseno sobre el índice invertido. Se uso un conjunto de datos de prueba obtenido de [Kaggle](https://www.kaggle.com/datasets). Este conjunto de datos está conformado por artículos de diferentes periódicos, que incluyen New York Times, CNN, Fox News, entre otros. Las publicaciones se encuentran principalmente entre los años 2016 y 2017. De acuerdo a lo aprendido, se espera obtener un alto grado de precisión a la consulta ingresada por el usuario, es decir, del conjunto de documentos recuperados, la mayoría son documentos relevantes para el usuario.
 
 ## Implementación
 ## Construcción del índice invertido
@@ -75,4 +75,16 @@ Se adjunta el siguiente video que muestra la funcionalidad de la aplicación.
 
 
 ## Anexos
+- Descripción de los campos en los registros del conjunto de datos
 
+Atributo | Definición
+------------ | -------------
+id | Identificador único
+title | Título de la publicación
+publication | Diario en el que fue publicado
+author | Autor que redacto el artículo
+date | Fecha de publicación
+year | Año de publicación
+month | Mes de publicación
+url | URL del artículo (no disponible para todos)
+content | Contenido del artículo
