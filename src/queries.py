@@ -3,7 +3,6 @@ import buildIndex
 from nltk import SnowballStemmer, word_tokenize
 from nltk.corpus import stopwords
 
-
 N = 154398
 
 def getIDF(terms):
@@ -75,15 +74,12 @@ index = buildIndex.readIndex("src/data/index.txt")
 query = "The election of Donald Trump and running mate Mike Pence set off panic in gay, lesbian, bisexual and transgender communities across the country"
 parsed = parse(query)
 
-
-
 qf = {}
 for term in parsed:
     if term in qf.keys():
         qf[term] += 1
     else:
         qf[term] = 1
-
 
 scores = {}
 for term in parsed:
