@@ -18,7 +18,7 @@ El objetivo de este proyecto fue implementar un índice invertido para tareas de
 
 ## Implementación
 ## Construcción del índice invertido
-Para implementar el índice invertido se utilizó el modelo de recuperación por ranking. Logramos implementar las principales operaciones solicitadas: carga e indexación de documentos y búsqueda textual. A continuación se muestra la construcción del índice.
+Para construir el índice invertido usamos la función `buildIndex()` que se muestra a continuación.
 ```python
 def buildIndex():
     file = pd.read_csv(DATA_FILE, encoding='UTF-8')
@@ -47,32 +47,24 @@ def buildIndex():
         outFile.writelines(str(docNorms))
 ```
 
-El método `writeIndex()` lo utilizamos para ...
+Debido a que nuestra colección de documentos esta en un archivo csv, empezamos leyendo este archivo. Para ello nos ayudamos de la función `read_csv` de pandas. Luego iteramos por cada fila, que en este caso representa un documento, y tokenizamos el texto concatenando el título del documento con su contenido. Para ello se uso la función `parse` que se puede ver en [tokenizer.py](./src/tokenizer.py). Esta se encarga del proceso de tokenización utilizando la librería `nltk` así como de filtración de stopwords y stemming. Luego almacenamos estos tokens o términos en el diccionario `termIndex`. Este sera un diccionario de 2 dimensiones en el cual se almacenará para cada término un diccionario que contiene el id y la frecuencia de este para cada documento en el que aparece. Sin embargo, al escribiro a un archivo lo tratamos como el id separado por un espacio a una lista de tuplas. Además, mantenemos el diccionario `docNorms` el cual ira guardando el factor de normalización de cada documento. Para esto último nos ayudamos de la librería numpy. Finalmente, escribimos ambos archivos a disco.
 
 
 ## Manejo en memoria secundaria
-
+Nuestra implementación mantiene 2 archivos en disco los cuales se cargan al correr el servidor: el índice invertido y los factores de normalización de cada documento. Inicialmente se intentó utilizar el algoritmo BSB (Blocked sort-based) para la construcción del índice. Algo de esto se puede ver en la rama dev donde llegamos a construir el índice dividido en varios archivos. Sin embargo, tuvimos problemas en el proceso de merge. 
 
 
 ## Ejecución óptima de consultas
-Para procesar las consultas en lenguaje natural se tuvo que parsear el texto ingresado por el usuario. La funcion `parse()` realiza esta tarea. 
-```python
-def parse(text):
-    words = word_tokenize(text.lower().strip())
-    i = 0
-    while i < len(words):
-        if words[i] in stoplist:
-            words.pop(i)
-        else:
-            i += 1
-    for i in range(len(words)):
-        words[i] = stemmer.stem(words[i])
-    return words
-```
+Para procesar las consultas en lenguaje natural se tuvo que parsear el texto ingresado por el usuario usando la misma función `parse()` utilizada durante la construcción del índice.
+
+## Aplicación web
+Para visualizar los resultados implementamos una pequeña aplicación web usando [Flask](https://flask.palletsprojects.com/en/2.0.x/#) para el servidor y [Angular](https://angular.io/) para el front. A continuación se muestra la interfaz.
+![](src/img/interface-ss.png "Interfaz de usuario")
 
 ## Prueba de uso
 Se adjunta el siguiente video que muestra la funcionalidad de la aplicación.
 
+## Conclusión
 
 ## Anexos
 - Descripción de los campos en los registros del conjunto de datos
