@@ -44,18 +44,6 @@ def normalizeTerms(terms, norm):
     return normalized
 
 
-def getCosSim(normTerms1, normTerms2):
-    cos = sum([normTerms1[i]*normTerms2[i] for i in range(len(normTerms1))])
-    return cos
-
-
-def getScore(vec):
-    vec = getLogFreq(vec)
-    idf = getIDF(vec)
-    vec = getTF_IDF(vec, idf)
-    return vec
-
-
 def getTermFrequenies(terms):
     tf = {}
     for term in terms:
@@ -76,9 +64,8 @@ def processQuery(query, termIndex, docNorms):
         idf = 0 if plist == None else getIDF(plist)
         wtq[term] = wtq[term] * idf
 
-        # tf only. TODO change
         if plist != None:
-            for doc, tf in plist.items():
+            for doc, tf in plist.items():                        
                 if doc in scores.keys():
                     scores[doc] += tf * wtq[term]
                 else:

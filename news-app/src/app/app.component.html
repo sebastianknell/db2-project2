@@ -2,13 +2,13 @@
   <div class="center">
     <h1>All The News</h1>
     <input autofocus [(ngModel)]="query">
-    <button (click)="sendQuery()" type="button" class="btn btn-dark" [disabled]="loading">
+    <button (click)="sendQuery()" type="button" class="btn btn-dark" [disabled]="loading" id="bt1">
       <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       {{loading ? 'Buscando...' : 'Buscar'}}
     </button>
     <br>
     <div *ngFor="let n of news">
-      <app-news-preview [data]="news[0]"></app-news-preview>
+      <app-news-preview [data]="n"></app-news-preview>
     </div>
   </div>
 </div>
