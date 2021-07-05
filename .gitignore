@@ -1,7 +1,8 @@
 .DS_Store
 src/__pycache__
 src/data/articles1.csv
-src/data/index.txt
+src/data/term-index.txt
+src/data/doc-index.txt
 src/data/temp
 src/data/doclen.txt
 .vscode/*
