@@ -174,6 +174,7 @@ Para visualizar los resultados implementamos una pequeña aplicación web usando
 
 ## Prueba de uso
 Se adjunta el siguiente video que muestra la funcionalidad de la aplicación.
+
 [DB2 - Proyecto 2 - Funcionalidad de la aplicación](https://drive.google.com/file/d/1uTbBVfxx8i-gB0EQekEFLWN_Aag8p-hA/view)
 
 ## Anexos
