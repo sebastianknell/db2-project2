@@ -10,7 +10,6 @@
     - [Construcción del índice invertido](#construcción-del-índice-invertido)
     - [Manejo en memoria secundaria](#manejo-en-memoria-secundaria)
     - [Ejecución óptima de consultas](#ejecución-óptima-de-consultas)
-  - [Resultados](#resultados)
   - [Prueba de uso](#prueba-de-uso)
   - [Anexos](#anexos)
 
@@ -41,7 +40,6 @@ def buildIndex():
         # 3. Stemming
         for i in range(len(words)):
             words[i] = stemmer.stem(words[i])
-
         # 4. Build index
         for token in words:
             if len(token) > 0 and token in index.keys():
@@ -64,11 +62,25 @@ El método `writeIndex()` lo utilizamos para ...
 
 
 ## Ejecución óptima de consultas
+Para procesar las consultas en lenguaje natural se tuvo que parsear el texto ingresado por el usuario. La funcion `parse()` realiza esta tarea. 
+```python
+def parse(query):
+    words = word_tokenize(query.lower())
+    stoplist = stopwords.words('english')
+    stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+', '']
+    stemmer = SnowballStemmer('english')
 
-
-
-## Resultados
-
+    cleanWords = words[:]
+    for token in words:
+        if token in stoplist:
+            cleanWords.remove(token)
+    
+    result = cleanWords[:]
+    for index, value in enumerate(cleanWords):
+        result[index] = stemmer.stem(value)
+    
+    return result
+```
 
 ## Prueba de uso
 Se adjunta el siguiente video que muestra la funcionalidad de la aplicación.
