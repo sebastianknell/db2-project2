@@ -54,7 +54,7 @@ def buildIndex():
     termIndex = {}
     docNorms = {}
     for id, row in file.iterrows():
-        text = row['title'] + ' ' + row['content']
+        text = str(row['title']) + ' ' + str(row['content'])
         words = parse(text)
         
         tf = getTermFrequenies(words)
