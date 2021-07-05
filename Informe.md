@@ -12,7 +12,6 @@
     - [Ejecución óptima de consultas](#ejecución-óptima-de-consultas)
     - [Aplicación Web](#aplicación-web)
   - [Prueba de uso](#prueba-de-uso)
-  - [Conclusión](#conclusión)
   - [Anexos](#anexos)
 
 
@@ -175,8 +174,6 @@ Para visualizar los resultados implementamos una pequeña aplicación web usando
 
 ## Prueba de uso
 Se adjunta el siguiente video que muestra la funcionalidad de la aplicación.
-
-## Conclusión
 
 ## Anexos
 - Descripción de los campos en los registros del conjunto de datos
