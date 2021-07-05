@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
-from nltk import SnowballStemmer, word_tokenize
-from nltk.corpus import stopwords
+from tokenizer import parse
 from ast import literal_eval
 
-DATA_FILE = "src/data/articles1.csv"
-TERM_INDEX_FILE = "src/data/term-index.txt"
-DOC_INDEX_FILE = "src/data/doc-index.txt"
-DOC_NORMS_FILE = "src/data/doc-norms.txt"
+DATA_FILE = "./data/articles1.csv"
+TERM_INDEX_FILE = "./data/term-index.txt"
+DOC_NORMS_FILE = "./data/doc-norms.txt"
 
 # Index structure
 # term:[(rowID,tf),...] -> df = length of list
@@ -53,43 +51,27 @@ def getTermFrequenies(terms):
 
 def buildIndex():
     file = pd.read_csv(DATA_FILE, encoding='UTF-8')
-    stemmer = SnowballStemmer('english')
-    stoplist = stopwords.words('english')
-    stoplist += ['.', ',', '?', '-', '–', '«', '»',
-                  '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '&', '*', '+', '']
     termIndex = {}
     docNorms = {}
     for id, row in file.iterrows():
         text = row['title'] + ' ' + row['content']
-        # 1. Tokenize
-        words = word_tokenize(text.lower().strip())
-        # 2. Filter stopswords
-        i = 0
-        while i < len(words):
-            if words[i] in stoplist:
-                words.pop(i)
-            else:
-                i += 1
-        # 3. Stemming
-        for i in range(len(words)):
-            words[i] = stemmer.stem(words[i])
+        words = parse(text)
         
         tf = getTermFrequenies(words)
         vector = np.array([item[1] for item in tf.items()])
         docNorms[id] = np.linalg.norm(vector)
 
-        # 4. Build termIndex
-        # for token in words:
-        #     if len(token) > 0 and token in termIndex.keys():
-        #         if id in termIndex[token].keys():
-        #             termIndex[token][id] += 1
-        #         else:
-        #             termIndex[token][id] = 1
-        #     else:
-        #         termIndex[token] = {id: 1}
+        for token in words:
+            if len(token) > 0 and token in termIndex.keys():
+                if id in termIndex[token].keys():
+                    termIndex[token][id] += 1
+                else:
+                    termIndex[token][id] = 1
+            else:
+                termIndex[token] = {id: 1}
 
-    # termIndex = dict(sorted(termIndex.items(), key=lambda elem: elem[0]))
-    # writeIndex(termIndex, TERM_INDEX_FILE)
+    termIndex = dict(sorted(termIndex.items(), key=lambda elem: elem[0]))
+    writeIndex(termIndex, TERM_INDEX_FILE)
     with open(DOC_NORMS_FILE, 'w+') as outFile:
         outFile.writelines(str(docNorms))
 
@@ -100,4 +82,4 @@ def readDocNorms():
     docNorms = literal_eval(text)
     return docNorms
 
-buildIndex()
+# buildIndex()
