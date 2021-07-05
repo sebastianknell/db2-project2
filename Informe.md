@@ -22,36 +22,29 @@ Para implementar el índice invertido se utilizó el modelo de recuperación por
 ```python
 def buildIndex():
     file = pd.read_csv(DATA_FILE, encoding='UTF-8')
-    stemmer = SnowballStemmer('english')
-    stoplist = stopwords.words('english')
-    stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+', '']
-    index = {}
+    termIndex = {}
+    docNorms = {}
     for id, row in file.iterrows():
         text = row['title'] + ' ' + row['content']
-        # 1. Tokenize
-        words = word_tokenize(text.lower().strip())
-        # 2. Filter stopswords
-        i = 0
-        while i < len(words):
-            if words[i] in stoplist:
-                words.pop(i)
-            else:
-                i += 1
-        # 3. Stemming
-        for i in range(len(words)):
-            words[i] = stemmer.stem(words[i])
-        # 4. Build index
-        for token in words:
-            if len(token) > 0 and token in index.keys():
-                if id in index[token].keys():
-                    index[token][id] += 1
-                else:
-                    index[token][id] = 1
-            else:
-                index[token] = {id: 1}
+        words = parse(text)
+        
+        tf = getTermFrequenies(words)
+        vector = np.array([item[1] for item in tf.items()])
+        docNorms[id] = np.linalg.norm(vector)
 
-    index = dict(sorted(index.items(), key=lambda elem: elem[0]))
-    writeIndex(index, INDEX_FILE)
+        for token in words:
+            if len(token) > 0 and token in termIndex.keys():
+                if id in termIndex[token].keys():
+                    termIndex[token][id] += 1
+                else:
+                    termIndex[token][id] = 1
+            else:
+                termIndex[token] = {id: 1}
+
+    termIndex = dict(sorted(termIndex.items(), key=lambda elem: elem[0]))
+    writeIndex(termIndex, TERM_INDEX_FILE)
+    with open(DOC_NORMS_FILE, 'w+') as outFile:
+        outFile.writelines(str(docNorms))
 ```
 
 El método `writeIndex()` lo utilizamos para ...
@@ -64,22 +57,17 @@ El método `writeIndex()` lo utilizamos para ...
 ## Ejecución óptima de consultas
 Para procesar las consultas en lenguaje natural se tuvo que parsear el texto ingresado por el usuario. La funcion `parse()` realiza esta tarea. 
 ```python
-def parse(query):
-    words = word_tokenize(query.lower())
-    stoplist = stopwords.words('english')
-    stoplist += ['.', ',', '?', '-', '–', '«', '»', '(', ')', ':', ';', '#', '!', '$', '@', '%', '^', '*', '&', '*', '+', '']
-    stemmer = SnowballStemmer('english')
-
-    cleanWords = words[:]
-    for token in words:
-        if token in stoplist:
-            cleanWords.remove(token)
-    
-    result = cleanWords[:]
-    for index, value in enumerate(cleanWords):
-        result[index] = stemmer.stem(value)
-    
-    return result
+def parse(text):
+    words = word_tokenize(text.lower().strip())
+    i = 0
+    while i < len(words):
+        if words[i] in stoplist:
+            words.pop(i)
+        else:
+            i += 1
+    for i in range(len(words)):
+        words[i] = stemmer.stem(words[i])
+    return words
 ```
 
 ## Prueba de uso
